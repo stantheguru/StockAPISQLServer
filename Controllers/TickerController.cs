@@ -41,6 +41,29 @@ namespace StockAPISQL.Controllers
             }
         }
 
+        [HttpGet("GetTickerById")]
+        public async Task<ActionResult<DBTicker>> GetTikerById(int Id)
+        {
+            var tickerById = await _context.tickers.Select(
+                ticker => new DBTicker
+                {
+                    Id = ticker.Id,
+                    StockName= ticker.StockName,
+                    TickerName  = ticker.TickerName
+                }
+
+           ).FirstAsync(ticker=>ticker.Id == Id);
+            if(tickerById == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return tickerById;
+            }
+            
+        }
+
         [HttpPost("InsertTicker")]
         public async Task<HttpStatusCode> InsertTicker(DBTicker ticker)
         {
